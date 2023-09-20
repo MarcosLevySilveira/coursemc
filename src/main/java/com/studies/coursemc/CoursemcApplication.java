@@ -1,5 +1,6 @@
 package com.studies.coursemc;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,15 +10,22 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.studies.coursemc.domain.Address;
 import com.studies.coursemc.domain.Category;
+import com.studies.coursemc.domain.CheckPayment;
 import com.studies.coursemc.domain.City;
 import com.studies.coursemc.domain.Client;
+import com.studies.coursemc.domain.ClientOrder;
+import com.studies.coursemc.domain.CreditCardPayment;
+import com.studies.coursemc.domain.Payment;
 import com.studies.coursemc.domain.Product;
 import com.studies.coursemc.domain.Province;
 import com.studies.coursemc.domain.enums.ClientType;
+import com.studies.coursemc.domain.enums.PaymentStatus;
 import com.studies.coursemc.repositories.AddressRepository;
 import com.studies.coursemc.repositories.CategoryRepository;
 import com.studies.coursemc.repositories.CityRepository;
+import com.studies.coursemc.repositories.ClientOrderRepository;
 import com.studies.coursemc.repositories.ClientRepository;
+import com.studies.coursemc.repositories.PaymentRepository;
 import com.studies.coursemc.repositories.ProductRepository;
 import com.studies.coursemc.repositories.ProvinceRepository;
 
@@ -36,6 +44,11 @@ public class CoursemcApplication implements CommandLineRunner{
 	private ClientRepository clientRepository;
 	@Autowired
 	private AddressRepository addressRepository;
+	@Autowired
+	private ClientOrderRepository clientOrderRepository;
+	@Autowired
+	private PaymentRepository paymentRepository;
+	
 	
 	public static void main(String[] args) {
 		SpringApplication.run(CoursemcApplication.class, args);
@@ -88,6 +101,20 @@ public class CoursemcApplication implements CommandLineRunner{
 		
 		clientRepository.saveAll(Arrays.asList(client1));
 		addressRepository.saveAll(Arrays.asList(address1,address2));
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		ClientOrder order1 = new ClientOrder(null, sdf.parse("20/09/2023 10:32"), client1, address1);
+		ClientOrder order2 = new ClientOrder(null, sdf.parse("19/09/2023 10:36"), client1, address2);
+		
+		Payment payment1 = new CreditCardPayment(null, PaymentStatus.PAID, order1, 6);
+		order1.setPayment(payment1);
+		Payment payment2 = new CheckPayment(null, PaymentStatus.PENDING, order2, sdf.parse("20/10/2023 00:00"),null);
+		order2.setPayment(payment2);
+		
+		client1.getOrders().addAll(Arrays.asList(order1,order2));
+		
+		clientOrderRepository.saveAll(Arrays.asList(order1,order2));
+		paymentRepository.saveAll(Arrays.asList(payment1,payment2));
 	}
 	
 	
