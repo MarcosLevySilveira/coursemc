@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.studies.coursemc.domain.enums.ClientType;
 
 import jakarta.persistence.CollectionTable;
@@ -30,6 +31,7 @@ public class Client implements Serializable{
 	private String sinNumberOrBusinessNumber;
 	private Integer type;
 	
+	@JsonManagedReference
 	@OneToMany(mappedBy="client")
 	private List<Address> address = new ArrayList<>();
 	
