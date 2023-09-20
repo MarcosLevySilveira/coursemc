@@ -7,12 +7,17 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import com.studies.coursemc.domain.Address;
 import com.studies.coursemc.domain.Category;
 import com.studies.coursemc.domain.City;
+import com.studies.coursemc.domain.Client;
 import com.studies.coursemc.domain.Product;
 import com.studies.coursemc.domain.Province;
+import com.studies.coursemc.domain.enums.ClientType;
+import com.studies.coursemc.repositories.AddressRepository;
 import com.studies.coursemc.repositories.CategoryRepository;
 import com.studies.coursemc.repositories.CityRepository;
+import com.studies.coursemc.repositories.ClientRepository;
 import com.studies.coursemc.repositories.ProductRepository;
 import com.studies.coursemc.repositories.ProvinceRepository;
 
@@ -27,6 +32,10 @@ public class CoursemcApplication implements CommandLineRunner{
 	private ProvinceRepository provinceRepository;
 	@Autowired
 	private CityRepository cityRepository;
+	@Autowired
+	private ClientRepository clientRepository;
+	@Autowired
+	private AddressRepository addressRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(CoursemcApplication.class, args);
@@ -68,6 +77,19 @@ public class CoursemcApplication implements CommandLineRunner{
 		
 		provinceRepository.saveAll((Arrays.asList(province1,province2)));
 		cityRepository.saveAll((Arrays.asList(city1,city2,city3)));
+		
+		Client client1 = new Client(null, "Maria", "maria@gmail.com", "36378912377", ClientType.PERSON);
+		client1.getPhoneNumber().addAll(Arrays.asList("6472225465", "6476549885"));
+		
+		Address address1 = new Address(null, "Courton", "64", "unit 02", "Gardens", "38250546", client1, city1);
+		Address address2 = new Address(null, "Blechley", "64", "unit 15", "Park", "382741546", client1, city2);
+	
+		client1.getAddress().addAll(Arrays.asList(address1,address2));
+		
+		clientRepository.saveAll(Arrays.asList(client1));
+		addressRepository.saveAll(Arrays.asList(address1,address2));
 	}
+	
+	
 
 }
