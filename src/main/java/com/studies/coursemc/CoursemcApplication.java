@@ -15,6 +15,7 @@ import com.studies.coursemc.domain.City;
 import com.studies.coursemc.domain.Client;
 import com.studies.coursemc.domain.ClientOrder;
 import com.studies.coursemc.domain.CreditCardPayment;
+import com.studies.coursemc.domain.OrderedItem;
 import com.studies.coursemc.domain.Payment;
 import com.studies.coursemc.domain.Product;
 import com.studies.coursemc.domain.Province;
@@ -25,6 +26,7 @@ import com.studies.coursemc.repositories.CategoryRepository;
 import com.studies.coursemc.repositories.CityRepository;
 import com.studies.coursemc.repositories.ClientOrderRepository;
 import com.studies.coursemc.repositories.ClientRepository;
+import com.studies.coursemc.repositories.OrderedItemRepository;
 import com.studies.coursemc.repositories.PaymentRepository;
 import com.studies.coursemc.repositories.ProductRepository;
 import com.studies.coursemc.repositories.ProvinceRepository;
@@ -48,6 +50,8 @@ public class CoursemcApplication implements CommandLineRunner{
 	private ClientOrderRepository clientOrderRepository;
 	@Autowired
 	private PaymentRepository paymentRepository;
+	@Autowired
+	private OrderedItemRepository orderedItemRepository;
 	
 	
 	public static void main(String[] args) {
@@ -115,6 +119,20 @@ public class CoursemcApplication implements CommandLineRunner{
 		
 		clientOrderRepository.saveAll(Arrays.asList(order1,order2));
 		paymentRepository.saveAll(Arrays.asList(payment1,payment2));
+		
+		OrderedItem orderedItem1 = new OrderedItem(order1, p1, 0.00, 1, 2000.0);
+		OrderedItem orderedItem2 = new OrderedItem(order2, p3, 0.00, 2, 80.0);
+		OrderedItem orderedItem3 = new OrderedItem(order2, p2, 100.0, 1, 800.0);
+		
+		order1.getItens().addAll(Arrays.asList(orderedItem1,orderedItem2));
+		order2.getItens().addAll(Arrays.asList(orderedItem3));
+		
+		p1.getItens().addAll(Arrays.asList(orderedItem1));
+		p2.getItens().addAll(Arrays.asList(orderedItem3));
+		p3.getItens().addAll(Arrays.asList(orderedItem2));
+		
+		orderedItemRepository.saveAll(Arrays.asList(orderedItem1,orderedItem2,orderedItem3));
+		
 	}
 	
 	

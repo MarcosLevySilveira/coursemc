@@ -2,7 +2,9 @@ package com.studies.coursemc.domain;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -11,6 +13,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 
 @Entity
@@ -38,6 +41,10 @@ public class ClientOrder implements Serializable{
 	@ManyToOne
 	@JoinColumn(name="delivery_address_id")
 	private Address deliveryAddress;
+	
+	@OneToMany(mappedBy="id.clientOrder")
+	private Set<OrderedItem> itens = new HashSet<>();
+	
 	
 	public ClientOrder() {
 		
@@ -106,6 +113,14 @@ public class ClientOrder implements Serializable{
 			return false;
 		ClientOrder other = (ClientOrder) obj;
 		return Objects.equals(id, other.id);
+	}
+
+	public Set<OrderedItem> getItens() {
+		return itens;
+	}
+
+	public void setItens(Set<OrderedItem> itens) {
+		this.itens = itens;
 	}
 	
 	
