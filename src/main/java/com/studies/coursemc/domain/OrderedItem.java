@@ -3,6 +3,8 @@ package com.studies.coursemc.domain;
 import java.io.Serializable;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 
@@ -11,6 +13,7 @@ public class OrderedItem implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
+	@JsonIgnore
 	@EmbeddedId
 	private OrderedItemPK id = new OrderedItemPK();
 	
@@ -63,10 +66,12 @@ public class OrderedItem implements Serializable{
 		this.price = price;
 	}
 	
+	@JsonIgnore
 	public ClientOrder getClientOrder() {
 		return id.getClientOrder();
 	}
 	
+
 	public Product getProduct() {
 		return id.getProduct();
 	}

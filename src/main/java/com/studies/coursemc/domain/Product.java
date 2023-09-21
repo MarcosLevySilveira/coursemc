@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,7 +30,7 @@ public class Product implements Serializable{
 	private String name;
 	private Double price;
 	
-	@JsonBackReference
+	@JsonIgnore
 	@ManyToMany
 	@JoinTable(name = "Product_Category", 
 	joinColumns = @JoinColumn(name = "product_id"), 
@@ -38,6 +38,7 @@ public class Product implements Serializable{
 	
 	private List<Category> categories = new ArrayList<>();
 	
+	@JsonIgnore
 	@OneToMany(mappedBy="id.product")
 	private Set<OrderedItem> itens = new HashSet<>();
 	
@@ -53,6 +54,7 @@ public class Product implements Serializable{
 		this.price = price;
 	}
 	
+	@JsonIgnore
 	public List<ClientOrder> getClientOrder(){
 		List<ClientOrder> list = new ArrayList<>();
 		for (OrderedItem x : itens) {

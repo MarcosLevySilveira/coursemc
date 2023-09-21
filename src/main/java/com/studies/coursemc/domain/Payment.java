@@ -3,6 +3,7 @@ package com.studies.coursemc.domain;
 import java.io.Serializable;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.studies.coursemc.domain.enums.PaymentStatus;
 
 import jakarta.persistence.Entity;
@@ -26,6 +27,7 @@ public abstract class Payment implements Serializable {
 	private Integer id;
 	private Integer status;
 	
+	@JsonIgnore
 	@OneToOne
 	@JoinColumn(name="order_id")
 	@MapsId
